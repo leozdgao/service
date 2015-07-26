@@ -1,0 +1,15 @@
+require('babel/register');
+
+var Promise = require('bluebird');
+var mongoose = require('mongoose');
+Promise.promisifyAll(mongoose);
+
+var app = require('../server');
+var config = require('../config.json');
+
+var port = process.env.PORT || config.port;
+app.listen(port, function() {
+  console.log('Server listening on port ' + port);
+});
+
+require('../db');
