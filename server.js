@@ -1,13 +1,14 @@
-import express from 'express';
-import serviceRouter from './services/router';
+import express from 'express'
+import serviceRouter from './routers/router'
 
-const app = express();
+const app = express()
 
-app.use('/service', serviceRouter);
+app.use('/', serviceRouter)
 
 // handle error
 app.use((err, req, res, next) => {
-  res.status(500).json({msg: err.message || 'Unknown Error.'});
-});
+  let status = err.status || 500
+  res.status(status).json({msg: err.message || 'Unknown Error.'})
+})
 
-export default app;
+export default app
