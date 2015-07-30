@@ -1,5 +1,6 @@
 import url from 'url'
 import qs from 'qs'
+import bodyParser from 'body-parser'
 import {Router} from 'express'
 import Article from './model'
 import checkAuth from '../../middlewares/checkAuth'
@@ -59,7 +60,10 @@ router.get('/:article_id', (req, res, next) => {
 // check authentication for any HTTP method that not GET
 router.use(checkAuth)
 
-router.post('/', require('body-parser').json(), (req, res, next) => {
+router.use(bodyParser.json())
+router.use(bodyParser.urlencoded({extended: true}))
+
+router.post('/', (req, res, next) => {
   Article.post(req.body)
     .then((result) => {
       res.json(result)
@@ -69,7 +73,7 @@ router.post('/', require('body-parser').json(), (req, res, next) => {
     })
 })
 
-router.put('/:article_id', require('body-parser').json(), (req, res, next) => {
+router.put('/:article_id', (req, res, next) => {
   Article.update(req.article_id, req.body)
     .then((result) => {
       res.json(result)

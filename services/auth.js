@@ -21,15 +21,16 @@ const pwdExpired = 3600000 // 1 hour
 
 export const pwdService = {
   init() {
-    if(!fs.existsSync(authFilePath)) setToken(initPwd)
+    if(!fs.existsSync(authFilePath)) pwdService.setToken(initPwd)
   },
   reset() {
-    return setToken(initPwd)
+    return pwdService.setToken(initPwd)
   },
   setToken(val) {
     return salthash(val).then(({salt, hash}) => {
       return writeAuthFile(salt, hash)
     })
+    .then(clearLoginFile()) // clear login record every time reset password
   },
   checkToken(input) {
     let cur
