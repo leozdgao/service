@@ -2,6 +2,7 @@ import url from 'url'
 import qs from 'qs'
 import {Router} from 'express'
 import Article from './model'
+import checkAuth from '../../middlewares/checkAuth'
 
 const router = Router()
 const getQuery = (req) => qs.parse(url.parse(req.url).query)
@@ -54,6 +55,9 @@ router.get('/:article_id', (req, res, next) => {
         next(err)
       })
 })
+
+// check authentication for any HTTP method that not GET
+router.use(checkAuth)
 
 router.post('/', require('body-parser').json(), (req, res, next) => {
   Article.post(req.body)

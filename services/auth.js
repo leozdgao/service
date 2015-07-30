@@ -68,7 +68,7 @@ export const loginService = {
   checkAuth(utoken) { // also check expire
     return getLoginFileContent()
       .then(({token, date}) => {
-        if(!token || utoken !== token || date + pwdExpired < Date.now()) throw Error('Invalid token or token has expired.')
+        if(!token || utoken !== token || Number(date + pwdExpired) < Date.now()) throw Error('Invalid token or token has expired.')
       })
   }
 }
