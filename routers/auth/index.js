@@ -12,15 +12,19 @@ router.post('/', bodyParser.json(), (req, res, next) => {
   let {pwd} = req.body
   loginService.login(pwd)
     .then((token) => {
-      res.status(200).json({token})
+      // cookie 1 month expire
+      res.cookie('token', token, {maxAge: 2592000000, httpOnly: true})
+      res.json({status: 1})
     })
-    .catch(next)
+    .catch((e) => {console.log(e)
+      res.status(200).json({status: 0})
+    })
 })
 
 router.post('/reset', checkAuth, bodyParser.json(), (req, res, next) => {
   let {pwd} = req.body
   pwdService.setToken(pwd)
-    .then(() =>  res.status(200).end())
+    .then(() => res.status(200).end())
     .catch(next)
 })
 

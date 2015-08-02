@@ -1,8 +1,17 @@
 import express from 'express'
+import cors from 'cors'
+import url from 'url'
 import serviceRouter from './routers/router'
 
 const app = express()
+const corsOption = {
+  origin (origin, cb) {
+    cb(null, url.parse(origin).hostname == 'localhost') // enable localhost request
+  },
+  credentials: true
+}
 
+app.use(cors(corsOption))
 app.use('/', serviceRouter)
 
 // handle error
