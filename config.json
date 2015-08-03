@@ -1,7 +1,7 @@
 {
   "port": 3000,
   "db": {
-    "connection": "mongodb://localhost",
+    "connection": "mongodb://10.10.73.207:27018/test",
     "timeout": 10000
   }
 }

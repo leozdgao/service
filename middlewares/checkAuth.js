@@ -1,7 +1,8 @@
 import {loginService} from '../services/auth'
 
 export default (req, res, next) => {
-  let token = req.get('Authorization')
+  let token = req.cookies.token
+  
   loginService.checkAuth(token)
     .then(next)
     .catch((e) => {
