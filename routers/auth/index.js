@@ -22,9 +22,18 @@ router.post('/', (req, res, next) => {
 })
 
 router.post('/reset', checkAuth, (req, res, next) => {
-  let {pwd} = req.body
-  pwdService.setToken(pwd)
-    .then(() => res.status(200).end())
+  let {oldpwd, newpwd} = req.body
+  pwdService.checkToken(oldpwd)
+    .then((isSame) => {
+      if(isSame) {
+        pwdService.setToken(newpwd)
+          .then(() => {
+            res.clearCookie()
+            res.status(200).json({ status: 1 })
+          }, next)
+      }
+      else res.status(200).json({ status: 0 })
+    })
     .catch(next)
 })
 
