@@ -25,7 +25,7 @@ router.post('/reset', checkAuth, (req, res, next) => {
   let {oldpwd, newpwd} = req.body
   pwdService.checkToken(oldpwd)
     .then((isSame) => {
-      if(isSame) {
+      if (isSame) {
         pwdService.setToken(newpwd)
           .then(() => {
             res.clearCookie()

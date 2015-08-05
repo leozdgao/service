@@ -20,19 +20,19 @@ const pwdExpired = 3600000 // 1 hour
  */
 
 export const pwdService = {
-  init() {
-    if(!fs.existsSync(authFilePath)) pwdService.setToken(initPwd)
+  init () {
+    if (!fs.existsSync(authFilePath)) pwdService.setToken(initPwd)
   },
-  reset() {
+  reset () {
     return pwdService.setToken(initPwd)
   },
-  setToken(val) {
+  setToken (val) {
     return salthash(val).then(({salt, hash}) => {
       return writeAuthFile(salt, hash)
     })
     .then(clearLoginFile()) // clear login record every time reset password
   },
-  checkToken(input) {
+  checkToken (input) {
     let cur
     return getAuthFileContent()
       .then(({salt, hash}) => {
@@ -54,48 +54,48 @@ export const pwdService = {
  */
 
 export const loginService = {
-  login(pwd) { // actually it just check pwd
+  login (pwd) { // actually it just check pwd
     return pwdService.checkToken(pwd)
       .then((ret) => {
-        if(ret) return writeLoginFile(pwd)
+        if (ret) return writeLoginFile(pwd)
         else throw Error('login failed')
       })
   },
-  logout(utoken) {
+  logout (utoken) {
     return loginService.checkAuth(utoken)
       .then(clearLoginFile)
       .catch(() => {})
   },
-  checkAuth(utoken) { // also check expire
+  checkAuth (utoken) { // also check expire
     return getLoginFileContent()
       .then(({token, date}) => {
-        if(!token || utoken !== token || Number(date + pwdExpired) < Date.now()) throw Error('Invalid token or token has expired.')
+        if (!token || utoken !== token || Number(date + pwdExpired) < Date.now()) throw Error('Invalid token or token has expired.')
       })
   }
 }
 
-function writeAuthFile(salt, hash) {
+function writeAuthFile (salt, hash) {
   return fs.writeFileAsync(authFilePath, `${salt}\n${hash}`)
 }
 
-function writeLoginFile(pwd) {
+function writeLoginFile (pwd) {
   let date = Date.now()
   let token = md5(pwd + date)
   return fs.writeFileAsync(loginFilePath, `${token}\t${date}`).then(() => token)
 }
 
-function clearLoginFile() {
+function clearLoginFile () {
   return fs.writeFileAsync(loginFilePath, '')
 }
 
-function getAuthFileContent() {
+function getAuthFileContent () {
   return fs.readFileAsync(authFilePath, { encoding: 'utf-8' }).then((data) => {
     let [salt, hash] = data.split('\n')
     return { salt, hash }
   })
 }
 
-function getLoginFileContent() {
+function getLoginFileContent () {
   return fs.readFileAsync(loginFilePath, { encoding: 'utf-8' }).then((data) => {
     let [token, date] = data.split('\t')
     return { token, date }

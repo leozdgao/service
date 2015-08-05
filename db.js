@@ -13,25 +13,25 @@ const dbConfig = {
 const dbConncetion = process.env.DBCONNECTION || config.db.connection
 
 mongoose.connect(dbConncetion, dbConfig)
-console.log("Try to connect to DB, timeout set to " + timeout + "ms")
+console.log('Try to connect to DB, timeout set to ' + timeout + 'ms')
 
-mongoose.connection.on("connected", function() {
-  console.log("Connected to DB...")
+mongoose.connection.on('connected', () => {
+  console.log('Connected to DB...')
   connected = true
 })
 
-mongoose.connection.on("disconnected", function() {
+mongoose.connection.on('disconnected', () => {
   // after a successful connecting,
   // mongoose will reconnect automatically if connection disconnected.
-  if(!connected) {
-    console.error("DBConnection closed. Try to reconnect.")
+  if (!connected) {
+    console.error('DBConnection closed. Try to reconnect.')
 
-    setTimeout(function() {
+    setTimeout(() => {
       mongoose.connection.open(config.db.connection, dbConfig)
     }, timeout)
   }
 })
 
-mongoose.connection.on("error", function(err) {
-  console.error("Error occurred: " + err.message)
+mongoose.connection.on('error', (err) => {
+  console.error('Error occurred: ' + err.message)
 })

@@ -16,45 +16,37 @@ router.param('article_id', (req, res, next, id) => {
 router.get('/count', (req, res, next) => {
   let query = getQuery(req)
   Article.count(query.conditions)
-    .then(function(c) {
+    .then((c) => {
       res.json({count: c})
     })
-    .catch(function(err) {
-      next(err)
-    })
+    .catch(next)
 })
 
-router.get('/tags', function(req, res, next) {
+router.get('/tags', (req, res, next) => {
   Article.tags()
-    .then(function(ret) {
+    .then((ret) => {
       var tags = ret[0][0].value
       res.json(tags)
     })
-    .catch(function(err) {
-      next(err)
-    })
+    .catch(next)
 })
 
-router.get('/', (req, res) => { console.log(req.query)
+router.get('/', (req, res, next) => {
   let query = getQuery(req)
   Article.query(query.conditions, query.fields, query.options)
     .then((articles) => {
       res.json(articles)
     })
-    .catch((err) => {
-      next(err)
-    })
+    .catch(next)
 })
 
 router.get('/:article_id', (req, res, next) => {
-    let query = getQuery(req)
-    Article.get(req.article_id, query.fields, query.options)
-      .then((article) => {
-        res.json(article)
-      })
-      .catch((err) => {
-        next(err)
-      })
+  let query = getQuery(req)
+  Article.get(req.article_id, query.fields, query.options)
+    .then((article) => {
+      res.json(article)
+    })
+    .catch(next)
 })
 
 // check authentication for any HTTP method that not GET
@@ -68,9 +60,7 @@ router.post('/', (req, res, next) => {
     .then((result) => {
       res.json(result)
     })
-    .catch((err) => {
-      next(err)
-    })
+    .catch(next)
 })
 
 router.put('/:article_id', (req, res, next) => {
@@ -78,9 +68,7 @@ router.put('/:article_id', (req, res, next) => {
     .then((result) => {
       res.json(result)
     })
-    .catch((err) => {
-      next(err)
-    })
+    .catch(next)
 })
 
 router.delete('/:article_id', (req, res, next) => {
@@ -88,9 +76,7 @@ router.delete('/:article_id', (req, res, next) => {
     .then((result) => {
       res.json(result)
     })
-    .catch((err) => {
-      next(err)
-    })
+    .catch(next)
 })
 
 export default router
