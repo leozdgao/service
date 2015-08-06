@@ -13,7 +13,7 @@ const corsOption = {
 }
 
 app.use(cors(corsOption))
-app.use(cookieParser())
+app.use(cookieParser('leozdgao'))
 app.use('/', serviceRouter)
 
 // handle error

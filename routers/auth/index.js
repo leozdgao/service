@@ -13,7 +13,7 @@ router.post('/', (req, res, next) => {
   loginService.login(pwd)
     .then((token) => {
       // cookie 1 month expire
-      res.cookie('token', token, {maxAge: 2592000000, httpOnly: true})
+      res.cookie('_t', token, {maxAge: 2592000000, signed: true, httpOnly: true})
       res.json({status: 1})
     })
     .catch((e) => {
@@ -38,7 +38,7 @@ router.post('/reset', checkAuth, (req, res, next) => {
 })
 
 router.get('/logout', (req, res, next) => {
-  let token = req.cookies.token
+  let token = req.signedCookies._t
   loginService.logout(token)
     .then(() => {
       res.clearCookie('token')

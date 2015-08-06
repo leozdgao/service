@@ -11,6 +11,7 @@ const articleSchema = new Schema({
     category: { type: String },
     priority: { type: Number, default: 0 },
     content: { type: String, required: true },
+    abstract: { type: String },
     comments: { type: Array }
   }, { collection: 'articles', versionKey: false })
 
