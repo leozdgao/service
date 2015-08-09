@@ -7,7 +7,8 @@ import serviceRouter from './routers/router'
 const app = express()
 const corsOption = {
   origin (origin, cb) {
-    cb(null, url.parse('' + origin).hostname == 'localhost') // enable localhost request
+    let hostname = url.parse('' + origin).hostname
+    cb(null, hostname == 'localhost') // enable localhost request
   },
   credentials: true
 }
