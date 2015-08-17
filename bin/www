@@ -1,3 +1,4 @@
+/* eslint es6: false */
 require('babel/register')
 
 var Promise = require('bluebird')

@@ -1,7 +1,7 @@
 import path from 'path'
 import Promise from 'bluebird'
 import fs from 'fs'
-import {salthash, md5} from './encrypt'
+import { salthash, md5 } from './encrypt'
 
 // ensure promisify
 Promise.promisifyAll(fs)
@@ -27,7 +27,7 @@ export const pwdService = {
     return pwdService.setToken(initPwd)
   },
   setToken (val) {
-    return salthash(val).then(({salt, hash}) => {
+    return salthash(val).then(({ salt, hash }) => {
       return writeAuthFile(salt, hash)
     })
     .then(clearLoginFile()) // clear login record every time reset password
@@ -35,11 +35,11 @@ export const pwdService = {
   checkToken (input) {
     let cur
     return getAuthFileContent()
-      .then(({salt, hash}) => {
+      .then(({ salt, hash }) => {
         cur = hash
         return salthash(input, salt)
       })
-      .then(({salt, hash}) => {
+      .then(({ salt, hash }) => {
         return hash === cur
       })
   }

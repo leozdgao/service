@@ -1,7 +1,7 @@
-import {loginService} from '../services/auth'
+import { loginService } from '../services/auth'
 
 export default (req, res, next) => {
-  let token = req.signedCookies._t
+  const token = req.signedCookies._t
 
   loginService.checkAuth(token)
     .then(next)

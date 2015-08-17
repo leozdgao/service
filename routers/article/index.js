@@ -1,7 +1,7 @@
 import url from 'url'
 import qs from 'qs'
 import bodyParser from 'body-parser'
-import {Router} from 'express'
+import { Router } from 'express'
 import Article from './model'
 import checkAuth from '../../middlewares/checkAuth'
 
@@ -14,10 +14,10 @@ router.param('article_id', (req, res, next, id) => {
 })
 
 router.get('/count', (req, res, next) => {
-  let query = getQuery(req)
+  const query = getQuery(req)
   Article.count(query.conditions)
     .then((c) => {
-      res.json({count: c})
+      res.json({ count: c })
     })
     .catch(next)
 })
@@ -25,14 +25,14 @@ router.get('/count', (req, res, next) => {
 router.get('/tags', (req, res, next) => {
   Article.tags()
     .then((ret) => {
-      var tags = ret[0][0].value
+      const tags = ret[0][0].value
       res.json(tags)
     })
     .catch(next)
 })
 
 router.get('/', (req, res, next) => {
-  let query = getQuery(req)
+  const query = getQuery(req)
   Article.query(query.conditions, query.fields, query.options)
     .then((articles) => {
       res.json(articles)
@@ -41,7 +41,7 @@ router.get('/', (req, res, next) => {
 })
 
 router.get('/:article_id', (req, res, next) => {
-  let query = getQuery(req)
+  const query = getQuery(req)
   Article.get(req.article_id, query.fields, query.options)
     .then((article) => {
       res.json(article)
@@ -53,7 +53,7 @@ router.get('/:article_id', (req, res, next) => {
 router.use(checkAuth)
 
 router.use(bodyParser.json())
-router.use(bodyParser.urlencoded({extended: true}))
+router.use(bodyParser.urlencoded({ extended: true }))
 
 router.post('/', (req, res, next) => {
   Article.post(req.body)

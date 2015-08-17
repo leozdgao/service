@@ -1,28 +1,28 @@
-import {Router} from 'express'
+import { Router } from 'express'
 import bodyParser from 'body-parser'
-import {loginService, pwdService} from '../../services/auth'
+import { loginService, pwdService } from '../../services/auth'
 import checkAuth from '../../middlewares/checkAuth'
 
 const router = Router()
 
 router.use(bodyParser.json())
-router.use(bodyParser.urlencoded({extended: true}))
+router.use(bodyParser.urlencoded({ extended: true }))
 
 router.post('/', (req, res, next) => {
-  let {pwd} = req.body
+  const { pwd } = req.body
   loginService.login(pwd)
     .then((token) => {
       // cookie 1 month expire
-      res.cookie('_t', token, {maxAge: 2592000000, signed: true, httpOnly: true})
-      res.json({status: 1})
+      res.cookie('_t', token, { maxAge: 2592000000, signed: true, httpOnly: true })
+      res.json({ status: 1 })
     })
     .catch((e) => {
-      res.status(200).json({status: 0})
+      res.status(200).json({ status: 0 })
     })
 })
 
 router.post('/reset', checkAuth, (req, res, next) => {
-  let {oldpwd, newpwd} = req.body
+  const { oldpwd, newpwd } = req.body
   pwdService.checkToken(oldpwd)
     .then((isSame) => {
       if (isSame) {
@@ -38,7 +38,7 @@ router.post('/reset', checkAuth, (req, res, next) => {
 })
 
 router.get('/logout', (req, res, next) => {
-  let token = req.signedCookies._t
+  const token = req.signedCookies._t
   loginService.logout(token)
     .then(() => {
       res.clearCookie('token')

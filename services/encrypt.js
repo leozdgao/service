@@ -11,7 +11,7 @@ export function salthash (pwd, salt) {
         if (err) reject(err)
         else {
           hash = hash.toString('base64')
-          resolve({salt, hash})
+          resolve({ salt, hash })
         }
       })
     } else {
@@ -24,7 +24,7 @@ export function salthash (pwd, salt) {
             if (err) reject(err)
             else {
               hash = hash.toString('base64')
-              resolve({salt, hash})
+              resolve({ salt, hash })
             }
           })
         }
@@ -34,7 +34,7 @@ export function salthash (pwd, salt) {
 }
 
 export function md5 (content) {
-  let md5 = crypto.createHash('md5')
+  const md5 = crypto.createHash('md5')
   md5.update(content)
 
   return md5.digest('hex')
